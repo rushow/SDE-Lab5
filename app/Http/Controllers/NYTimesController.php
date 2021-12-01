@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-
 use App\Http\Requests\ProfileRequest;
 use App\Http\Requests\PasswordRequest;
 use Illuminate\Support\Facades\Hash;
@@ -20,25 +19,13 @@ class NYTimesController extends Controller
      *
      * @return \Illuminate\View\View
      */
-    public function index()
+    public function index(Request $request)
     {
         $response_json = Http::get('https://api.nytimes.com/svc/topstories/v2/home.json?api-key=W1hafgsykUqecrPRjQpk4vAzXsfWMHqH');
 
         $response = json_decode($response_json);
         $results = $response->results;
-        // echo '<pre>';
-        // print_r($results);
-        // if( $response->successful() ){
-            
-        //     //do some logic
-        //     //redirect https://www.test1.com/
-    
-        // }elseif( $response->failed() ){
-
-        //     //do some logic
-        //     //redirect https://www.test2.com/
-
-        // }
+   
 
         foreach($results as $result){
             $social_post = new SocialPost();

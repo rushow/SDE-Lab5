@@ -17,13 +17,10 @@ class SocialPostController extends Controller
     }
 
    
-    public function index()
+    public function index(Request $request)
     {
         $social_post = SocialPost::all();
-
         return response()->json($social_post);
-        // return response()->json($request->user());
-        // return SocialPostCollection::collection(SocialPost::paginate(10));
     }
     
     public function store(SocialPostRequest $request)

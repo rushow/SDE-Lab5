@@ -17,5 +17,4 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/nytimes', 'NYTimesController@index')->name('nytimes');
-Route::get('/socialposts', 'SocialPostController@index')->name('socialposts');
+
