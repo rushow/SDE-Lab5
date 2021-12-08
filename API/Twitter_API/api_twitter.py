@@ -15,7 +15,7 @@ auth.set_access_token(access_token, access_token_secret)
 api = tw.API(auth, wait_on_rate_limit=True)
 #https://www.earthdatascience.org/courses/use-data-open-source-python/intro-to-apis/twitter-data-in-python/
 def search_tweet():
-    search_words = "#france"
+    search_words = "#wildfires"
     date_since = "2018-11-16"
     #search only tweets about search words which are the most popular but can look for recent or mixed 
     #we can look for tweets before a certain date with until
