@@ -46,6 +46,10 @@ def utf_correction():
         jsonFile.close()
     with open("./API/Twitter_API/tweets_corect.json","w",encoding='utf-8') as jsonFile:
         for tweet in tweets:
+            for text in tweet:
+                    text["text"]=text["text"].strip('\n\n')
+                    text["text"]=text["text"].replace('\n',' ')
+                    text["location"]=text["location"].strip()
             json.dump(tweet,jsonFile,ensure_ascii=False)
 #search_tweet()
 utf_correction()

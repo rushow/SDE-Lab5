@@ -40,6 +40,9 @@ def utf_correction():
         jsonFile.close()
     with open("./API/Reddit_API/post_corect.json","w",encoding='utf-8') as jsonFile:
         for tweet in tweets:
+            for text in tweet:
+                text["text"]=text["text"].strip()
+                text["text"]=text["text"].replace('\n',' ')
             json.dump(tweet,jsonFile,ensure_ascii=False)
 #search_post()
 utf_correction()
