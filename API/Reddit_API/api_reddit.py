@@ -2,6 +2,7 @@
 import praw
 import pandas as pd
 import datetime
+import json
 
 client_id="BPeqBX7V9aPBAQMIZQGHRQ"
 secret="S1RvpoYGAefvUGWZY4mPlIjldKZRBg"
@@ -30,4 +31,15 @@ def search_post():
         final_dataset.append(posts)
     final_dataset=pd.concat(final_dataset)
     final_dataset.to_json(r'./API/Reddit_API/post.json',orient='records',default_handler=str)
-search_post()
+def utf_correction():
+    tweets=[]
+    with open("./API/Reddit_API/post.json") as jsonFile:
+        for jsonObj in jsonFile:
+            tweet = json.loads(jsonObj)
+            tweets.append(tweet)
+        jsonFile.close()
+    with open("./API/Reddit_API/post_corect.json","w",encoding='utf-8') as jsonFile:
+        for tweet in tweets:
+            json.dump(tweet,jsonFile,ensure_ascii=False)
+#search_post()
+utf_correction()

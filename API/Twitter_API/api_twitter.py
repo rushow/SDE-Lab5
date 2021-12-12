@@ -2,6 +2,7 @@ import os
 import tweepy as tw
 import pandas as pd
 from datetime import datetime
+import json
 
 #consumer Key
 consumer_key="Xz1Gi8qMiX0RDgbXSY33II8BB"
@@ -35,6 +36,16 @@ def search_tweet():
                         columns=['id','subject',"date","user_name","location","language","text"])
         final_dataset.append(tweet_text)
     final_dataset=pd.concat(final_dataset)
-    final_dataset.to_json(r'./API/Twitter_API/tweets.json',orient='records')
-
-search_tweet()
+    final_dataset.to_json(r'./API/Twitter_API/tweets.json',orient='records',encoding="utf-8-sig")
+def utf_correction():
+    tweets=[]
+    with open("./API/Twitter_API/tweets.json") as jsonFile:
+        for jsonObj in jsonFile:
+            tweet = json.loads(jsonObj)
+            tweets.append(tweet)
+        jsonFile.close()
+    with open("./API/Twitter_API/tweets_corect.json","w",encoding='utf-8') as jsonFile:
+        for tweet in tweets:
+            json.dump(tweet,jsonFile,ensure_ascii=False)
+#search_tweet()
+utf_correction()
