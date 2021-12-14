@@ -3,13 +3,14 @@ import tweepy as tw
 import pandas as pd
 from datetime import datetime
 import json
+import access
 
 #consumer Key
-consumer_key="Xz1Gi8qMiX0RDgbXSY33II8BB"
-consumer_secret="NzCn4dSLvaJGxYZHzJyHnsyJ93KiJfM03cJhjBkjduIvRAeabG"
-BEARER_TOKEN="AAAAAAAAAAAAAAAAAAAAAO3AWgEAAAAA9xqjDcIkoan0PxrDixk6ayBO6SY%3DTd9kHDvkOxPViALPnmkgCulTMlOh69YozuGcog1GozeZVlidnG"
-access_token="1468521297118478336-SFvUrKRb4394arDgqQjZUattq0Y7Ee"
-access_token_secret="6BddGxqoNdH1b6y8VQCz1uWgqGvDKv9kYKCCmKNWSjkwV"
+consumer_key=access.consumer_key
+consumer_secret=access.consumer_secret
+BEARER_TOKEN=access.BEARER_TOKEN
+access_token=access.access_token
+access_token_secret=access.access_token_secret
 
 auth = tw.OAuthHandler(consumer_key, consumer_secret,)
 auth.set_access_token(access_token, access_token_secret)
@@ -36,7 +37,7 @@ def search_tweet():
                         columns=['id','subject',"date","user_name","location","language","text"])
         final_dataset.append(tweet_text)
     final_dataset=pd.concat(final_dataset)
-    final_dataset.to_json(r'./API/Twitter_API/tweets.json',orient='records',encoding="utf-8-sig")
+    #final_dataset.to_json(r'./API/Twitter_API/tweets.json',orient='records',encoding="utf-8-sig")
 def utf_correction():
     tweets=[]
     with open("./API/Twitter_API/tweets.json") as jsonFile:
@@ -51,5 +52,5 @@ def utf_correction():
                     text["text"]=text["text"].replace('\n',' ')
                     text["location"]=text["location"].strip()
             json.dump(tweet,jsonFile,ensure_ascii=False)
-#search_tweet()
-utf_correction()
+search_tweet()
+#utf_correction()
