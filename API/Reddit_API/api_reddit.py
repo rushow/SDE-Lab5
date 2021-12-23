@@ -30,7 +30,7 @@ def search_post():
         posts = pd.DataFrame(data=posts,columns=['id','subject', 'date', 'name','name_author','score', 'subreddit_name', 'url', 'num_comments', 'text'])
         final_dataset.append(posts)
     final_dataset=pd.concat(final_dataset)
-    final_dataset.to_json(r'./API/Reddit_API/post.json',orient='records',default_handler=str)
+    #final_dataset.to_json(r'./API/Reddit_API/post.json',orient='records',default_handler=str)
 def utf_correction():
     tweets=[]
     with open("./API/Reddit_API/post.json") as jsonFile:
@@ -44,5 +44,5 @@ def utf_correction():
                 text["text"]=text["text"].strip()
                 text["text"]=text["text"].replace('\n',' ')
             json.dump(tweet,jsonFile,ensure_ascii=False)
-#search_post()
-utf_correction()
+search_post()
+#utf_correction()
