@@ -26,20 +26,24 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
         type = req.route_params.get('type')
         if (type == 'job'):
             # 2846001789
+            # http://localhost:7071/api/Linkedin/job?job_id=2845615594
             job_id = req.params.get('job_id')
             return func.HttpResponse(ResponseSuccess(get_job(job_id)), mimetype="application/json")
 
         if (type == 'post'):
             # https://www.linkedin.com/posts/tom-alder_strategy-fintech-payments-activity-6835038759793381376-gz2F
+            # http://localhost:7071/api/Linkedin/post/?post_url=https://www.linkedin.com/posts/tom-alder_strategy-fintech-payments-activity-6835038759793381376-gz2F
             post_url = req.params.get('post_url')
             return func.HttpResponse(ResponseSuccess(get_post(post_url)), mimetype="application/json")
 
         if (type == 'pulse'):
             # https://www.linkedin.com/pulse/future-ge-larry-culp
+            # http://localhost:7071/api/Linkedin/pulse/?pulse_url=https://www.linkedin.com/pulse/future-ge-larry-culp
             pulse_url = req.params.get('pulse_url')
             return func.HttpResponse(ResponseSuccess(get_pulse(pulse_url)), mimetype="application/json")
 
         if (type == 'main-hub'):
+            # http://localhost:7071/api/Linkedin/main-hub
             return func.HttpResponse(ResponseSuccess(get_main_hub_topics()), mimetype="application/json")
 
         if (type == 'child-hub'):
