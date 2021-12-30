@@ -9,7 +9,8 @@
       "methods": [
         "get",
         "post"
-      ]
+      ],
+      "route": "Twitter/{type}"
     },
     {
       "type": "http",

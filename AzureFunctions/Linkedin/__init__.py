@@ -1,22 +1,7 @@
 import logging
 from api.linkedin_crawler import *
 import azure.functions as func
-import json
-import traceback
-
-def ResponseSuccess(obj):
-    return json.dumps({
-            'success': True,
-            'data': obj
-         })
-
-def ResponseFail(message):
-    return json.dumps({
-            'success': False,
-            'message': message,
-            'data': None
-         })
-
+from api.api_utils import *
 
 # get_job(2846000000)
 # get_job(2843000055)

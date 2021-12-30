@@ -1,24 +1,27 @@
 import logging
 
 import azure.functions as func
-
+from api.api_utils import *
+from api.twitter_crawler import *
 
 def main(req: func.HttpRequest) -> func.HttpResponse:
     logging.info('Python HTTP trigger function processed a request.')
+    try:
+        type = req.route_params.get('type')
+        if (type == 'search-tweet'):
+            # http://localhost:7071/api/Twitter
+            # http://localhost:7071/api/Twitter?trends=Covid, Vaccine
 
-    name = req.params.get('name')
-    if not name:
-        try:
-            req_body = req.get_json()
-        except ValueError:
-            pass
-        else:
-            name = req_body.get('name')
+            trends = req.params.get('trends')
+            return func.HttpResponse(ResponseSuccess(search_tweet(trends)), mimetype="application/json")
 
-    if name:
-        return func.HttpResponse(f"Hello, {name}. This HTTP triggered function executed successfully.")
-    else:
+        return func.HttpResponse(ResponseFail('Route not found'), mimetype="application/json")
+    except Exception as e:
+        traceback.print_exc() 
+        logging.error('Error ' + str(e))
+
         return func.HttpResponse(
-             "This HTTP triggered function executed successfully. Pass a name in the query string or in the request body for a personalized response.",
-             status_code=200
+             "Error " + str(e),
+             mimetype="application/json", status_code=400
         )
+
