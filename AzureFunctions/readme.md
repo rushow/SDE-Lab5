@@ -9,6 +9,14 @@ On the root folder /AzureFunctions/ -> create .venv environment folder (command 
 Select interprecter there .venv environment
 Press F5 to run
 
+!Important
+To testing api without install above environments: Get the docker from here: docker pull zhenyuan0502/azurefunctionsimage:v1.0.0 
+Public repository here https://hub.docker.com/repository/docker/zhenyuan0502/azurefunctionsimage
+Then run: docker run -p 8080:80 -it zhenyuan0502/azurefunctionsimage:v1.0.0
+Simple test to make sure it works
+- http://localhost:8080/api/Reddit/search-reddit?trends=stress
+
+
 When it run successfully will be likely below text
 ###########
 Found Python version 3.8.10 (py).
