@@ -44,6 +44,8 @@ def search_tweet(trends):
                 'location': tweet.user.location,
                 'language': tweet.lang,
                 'text': tweet.text,
+                'retweet_count': tweet.retweet_count,
+                'likes': tweet.favorite_count,
             }
             rows.append(row)
    
