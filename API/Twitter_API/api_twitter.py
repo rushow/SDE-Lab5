@@ -32,12 +32,12 @@ def search_tweet():
         for tweet in tweets:
             #for more information look here: https://developer.twitter.com/en/docs/twitter-api/v1/tweets/search/api-reference/get-search-tweets#example-response
             new_datetime = tweet.created_at.strftime('%Y-%m-%d')
-            data_sets.append([tweet.id,trends,new_datetime,tweet.user.name,tweet.user.location,tweet.lang, tweet.text])
+            data_sets.append([tweet.id,trends,new_datetime,tweet.user.name,tweet.user.location,tweet.lang, tweet.text,tweet.retweet_count,tweet.favorite_count])
         tweet_text = pd.DataFrame(data=data_sets, 
-                        columns=['id','subject',"date","user_name","location","language","text"])
+                        columns=['id','subject',"date","user_name","location","language","text","retweet_count","likes"])
         final_dataset.append(tweet_text)
     final_dataset=pd.concat(final_dataset)
-    #final_dataset.to_json(r'./API/Twitter_API/tweets.json',orient='records',encoding="utf-8-sig")
+    final_dataset.to_json(r'./API/Twitter_API/tweets.json',orient='records')
 def utf_correction():
     tweets=[]
     with open("./API/Twitter_API/tweets.json") as jsonFile:
@@ -52,5 +52,5 @@ def utf_correction():
                     text["text"]=text["text"].replace('\n',' ')
                     text["location"]=text["location"].strip()
             json.dump(tweet,jsonFile,ensure_ascii=False)
-search_tweet()
-#utf_correction()
+#search_tweet()
+utf_correction()

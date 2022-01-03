@@ -26,7 +26,7 @@ def search_post():
             else:
                 name=post.author.name
             #details about what kind of information we can find in post https://praw.readthedocs.io/en/latest/code_overview/models/submission.html?highlight=num_comments#praw.models.Submission
-            posts.append([post.id,trends,new_datetime,post.title,name, post.score, post.subreddit.display_name, post.url, post.num_comments, post.selftext ])
+            posts.append([post.id,trends,new_datetime,post.title,name, post.score, post.subreddit.display_name, post.url, post.num_comments, post.selftext])
         posts = pd.DataFrame(data=posts,columns=['id','subject', 'date', 'name','name_author','score', 'subreddit_name', 'url', 'num_comments', 'text'])
         final_dataset.append(posts)
     final_dataset=pd.concat(final_dataset)
