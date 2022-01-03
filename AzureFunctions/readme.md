@@ -10,11 +10,13 @@ Select interprecter there .venv environment
 Press F5 to run
 - If it required Azure Web Job Storage to run, just install this: https://go.microsoft.com/fwlink/?linkid=717179&clcid=0x409
 
-!For testing api without install above environments: Get the docker from here: docker pull zhenyuan0502/azurefunctionsimage:1.0
+!For testing api without install above environments: Get the docker from here: docker pull zhenyuan0502/azurefunctionimage:1.0
 Public repository here https://hub.docker.com/repository/docker/zhenyuan0502/azurefunctionimage
 Then run: docker run -p 8080:80 -it zhenyuan0502/azurefunctionimage:1.0
-Simple test to make sure it works11
-- http://localhost:8080/api/Reddit/search-reddit?trends=stress
+Simple test to make sure it works
+- Command: docker pull zhenyuan0502/azurefunctionimage:1.0
+- Command: docker run -p 8080:80 -it zhenyuan0502/azurefunctionimage:1.0
+- Postman: http://localhost:8080/api/Reddit/search-reddit?trends=stress
 
 
 When it run successfully will be likely below text
