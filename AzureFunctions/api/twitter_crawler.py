@@ -3,7 +3,6 @@ import tweepy as tw
 import pandas as pd
 from datetime import datetime
 import json
-import access
 
 #consumer Key
 consumer_key= 'DSn8jLXd22z5LuBB1TEYhwRiL'
@@ -31,9 +30,9 @@ def search_tweet(trends):
         #search only tweets about search words which are the most popular but can look for recent or mixed 
         #we can look for tweets before a certain date with until
         tweets = tw.Cursor(api.search_tweets,
-                    q=trend,
+                    q=trend.strip(),
                     lang="en",
-                    result_type="mixed").items(10)
+                    result_type="mixed").items(10) 
 
         for tweet in tweets:
             #for more information look here: https://developer.twitter.com/en/docs/twitter-api/v1/tweets/search/api-reference/get-search-tweets#example-response

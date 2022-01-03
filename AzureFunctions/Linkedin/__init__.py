@@ -62,6 +62,6 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
         logging.error('Error ' + str(e))
 
         return func.HttpResponse(
-             "Error " + str(e),
+             ResponseFail("Error " + str(e)),
              mimetype="application/json", status_code=400
         )

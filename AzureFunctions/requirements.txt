@@ -6,4 +6,4 @@ azure-functions
 requests
 bs4
 tweepy
-access
+praw

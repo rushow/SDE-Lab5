@@ -10,7 +10,7 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
         type = req.route_params.get('type')
         if (type == 'search-tweet'):
             # http://localhost:7071/api/Twitter
-            # http://localhost:7071/api/Twitter?trends=Covid, Vaccine
+            # http://localhost:7071/api/Twitter/search-tweet?trends=Covid,Vaccine
 
             trends = req.params.get('trends')
             return func.HttpResponse(ResponseSuccess(search_tweet(trends)), mimetype="application/json")
@@ -21,7 +21,7 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
         logging.error('Error ' + str(e))
 
         return func.HttpResponse(
-             "Error " + str(e),
+             ResponseFail("Error " + str(e)),
              mimetype="application/json", status_code=400
         )
 
