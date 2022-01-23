@@ -14,9 +14,10 @@ def search_post():
     # if we want more info about the subrreddit (like description) https://praw.readthedocs.io/en/latest/code_overview/models/subreddit.html
     trending=["afghanistan","COVID19","FIFA22","dune","dogecoin","squidgame","sports","ethereum","tigerwoods","battlefield2042"]
     for trends in trending:
+        posts = []
         print(trends)
         ml_subreddit = reddit.subreddit(trends)
-        for post in ml_subreddit.hot(limit=100):
+        for post in ml_subreddit.hot(limit=500):
             post.created=int(post.created)
             timestamp = datetime.datetime.fromtimestamp(post.created)
             new_datetime = timestamp.strftime('%Y-%m-%d')
@@ -30,7 +31,7 @@ def search_post():
         posts = pd.DataFrame(data=posts,columns=['id','subject', 'date', 'name','name_author','score', 'subreddit_name', 'url', 'num_comments', 'text'])
         final_dataset.append(posts)
     final_dataset=pd.concat(final_dataset)
-    #final_dataset.to_json(r'./API/Reddit_API/post.json',orient='records',default_handler=str)
+    final_dataset.to_json(r'./API/Reddit_API/post.json',orient='records',default_handler=str)
 def utf_correction():
     tweets=[]
     with open("./API/Reddit_API/post.json") as jsonFile:
