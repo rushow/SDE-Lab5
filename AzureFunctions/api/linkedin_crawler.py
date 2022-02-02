@@ -41,7 +41,7 @@ def get_date(date_str):
     # hours=0
     # weeks=0
     today = date.today()
-    
+    date_str = date_str.replace('Edited', '').replace('•', '').replace('·','').replace('\n', '').strip()
     if 'mo' in date_str:
         num = int(date_str.replace('mo', ''))
         return today - timedelta(days=num*365.25/12)

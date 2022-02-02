@@ -1,6 +1,7 @@
 # %%
 import json
-
+import io
+import traceback
 
 # %%
 import requests
@@ -42,7 +43,7 @@ def get_date(date_str):
     # hours=0
     # weeks=0
     today = date.today()
-
+    date_str = date_str.replace('Edited', '').replace('•', '').replace('·','').replace('\n', '').strip()
     if 'mo' in date_str:
         num = int(date_str.replace('mo', ''))
         return today - timedelta(days=num*365.25/12)
@@ -106,7 +107,6 @@ def get_post(url):
         'comment_count': comment_count.text.strip() if comment_count is not None else '0'
     }
     return row
-
 # %%
 
 def crawl(range_from, range_to):
@@ -117,9 +117,11 @@ def crawl(range_from, range_to):
 
 
     result_list = []
+    last_link = ''
     try:
         print(f'From {range_from} to {range_to}')
         for content in links[range_from:range_to]:
+            last_link = content
             dct = get_post(content)
             result_list.append(dct)
             if len(result_list) % 100 == 0:
@@ -128,9 +130,15 @@ def crawl(range_from, range_to):
         with open(f'list_post_contents_v2_{range_from}_{range_to}.json', 'w', encoding='utf-8') as f:
             json.dump(result_list, f, indent=4)
     except:
-        print(f'Error stoped at {len(result_list)}')
+        print(f'Error stoped at {len(result_list)}, {last_link}')
         with open(f'list_post_contents_v2_{range_from}_{range_to}.json', 'w', encoding='utf-8') as f:
             json.dump(result_list, f, indent=4)
+
+        errors = io.StringIO()
+        traceback.print_exc(file=errors)
+        contents = str(errors.getvalue())
+        print(contents)
+        errors.close()
 
 # %%
 
