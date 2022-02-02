@@ -109,37 +109,30 @@ def get_post(url):
     return row
 # %%
 
-def crawl(range_from, range_to):
-    links = []
-    with open('list_posts_v2.txt', 'r') as f:
-        for text in f.readlines():
-            links.append(text)
-
-
+def crawl(vers, links, range_from, range_to):
     result_list = []
     last_link = ''
-    try:
-        print(f'From {range_from} to {range_to}')
-        for content in links[range_from:range_to]:
-            last_link = content
+    print(f'From {range_from} to {range_to}')
+    for content in links[range_from:range_to]:
+        last_link = content
+        try:
             dct = get_post(content)
             result_list.append(dct)
-            if len(result_list) % 100 == 0:
-                print(len(result_list))
+        except:
+            print(f'Error at {len(result_list)}, {last_link}')
+            with open(f'list_post_contents_{vers}_{range_from}_{range_to}.json', 'w', encoding='utf-8') as f:
+                json.dump(result_list, f, indent=4)
 
-        with open(f'list_post_contents_v2_{range_from}_{range_to}.json', 'w', encoding='utf-8') as f:
-            json.dump(result_list, f, indent=4)
-    except:
-        print(f'Error stoped at {len(result_list)}, {last_link}')
-        with open(f'list_post_contents_v2_{range_from}_{range_to}.json', 'w', encoding='utf-8') as f:
-            json.dump(result_list, f, indent=4)
+            errors = io.StringIO()
+            traceback.print_exc(file=errors)
+            contents = str(errors.getvalue())
+            print(contents)
+            errors.close()
+            continue
 
-        errors = io.StringIO()
-        traceback.print_exc(file=errors)
-        contents = str(errors.getvalue())
-        print(contents)
-        errors.close()
-
+    with open(f'list_post_contents_{vers}_{range_from}_{range_to}.json', 'w', encoding='utf-8') as f:
+        json.dump(result_list, f, indent=4)
+  
 # %%
 
 
