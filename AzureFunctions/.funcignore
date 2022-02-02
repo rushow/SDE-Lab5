@@ -1,4 +1,3 @@
 .git*
 .vscode
 test
-.venv

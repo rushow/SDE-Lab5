@@ -3,6 +3,71 @@ from bs4 import BeautifulSoup
 import logging
 import re
 
+def get_hashtagslist(string):
+    ret = []
+    s=''
+    hashtag = False
+    for char in string:
+        if char=='#':
+            hashtag = True
+            if s:
+                ret.append(s)
+                s=''           
+            continue
+
+        # take only the prefix of the hastag in case contain one of this chars (like on:  '#happy,but i..' it will takes only 'happy'  )
+        if hashtag and char in [' ','.',',','(',')',':','{','}'] and s:
+            ret.append(s)
+            s=''
+            hashtag=False 
+
+        if hashtag:
+            s+=char
+
+    if s:
+        ret.append(s)
+
+    return ret
+
+
+
+from datetime import date, timedelta
+def get_date(date_str):
+    # days=0
+    # seconds=0
+    # microseconds=0
+    # milliseconds=0
+    # minutes=0
+    # hours=0
+    # weeks=0
+    today = date.today()
+    
+    if 'mo' in date_str:
+        num = int(date_str.replace('mo', ''))
+        return today - timedelta(days=num*365.25/12)
+        
+    if 'm' in date_str:
+        num = int(date_str.replace('m', ''))
+        return today - timedelta(minutes=num)
+        
+    if 'd' in date_str:
+        num = int(date_str.replace('d', ''))
+        return today - timedelta(days=num)
+        
+    if 'h' in date_str:
+        num = int(date_str.replace('h', ''))
+        return today - timedelta(hours=num)
+        
+    if 'w' in date_str:
+        num = int(date_str.replace('w', ''))
+        return today - timedelta(weeks=num)
+
+    if 'yr' in date_str:
+        num = int(date_str.replace('yr', ''))
+        return today - timedelta(days=num*365.25)
+
+    return today
+
 # get_pulse('https://www.linkedin.com/pulse/future-ge-larry-culp')
 # {'author': 'Larry Culp',
 #  'author_info': 'Chairman & CEO at GE',
@@ -23,6 +88,7 @@ def get_pulse(url):
     soup = BeautifulSoup(response.text, 'html.parser')
     like_count = soup.find('span', {'class':'social-counts-reactions__social-counts-numRections'})
     comment_count = soup.find('a', {'data-tracking-control-name':'pulse-article_social-details_social-action-counts_comments-text'})
+    content = soup.find('div', {'class':'article-content__body'}).text.strip()
     row = {
         'type': 'Page Pulse Linkedin',
         'linkedin_url': url,
@@ -30,7 +96,8 @@ def get_pulse(url):
         'author_info': soup.find('h4', {'class':'base-main-card__subtitle'}).text.strip(),
         'date': soup.find('div', {'class':'base-main-card__metadata'}).text.strip(),
         'content_title': soup.find('meta', {'property':'og:title'})['content'],
-        'content': soup.find('div', {'class':'article-content__body'}).text.strip(),
+        'content': content,
+        'hashtags': get_hashtagslist(content),
         'like_count': like_count.text.strip() if like_count is not None else '0',
         'comment_count': comment_count.text.strip() if comment_count is not None else '0'
     }
@@ -50,7 +117,8 @@ def get_pulse(url):
 #  'linkedin_url': 'https://www.linkedin.com/posts/ericmahecha_team-lead-account-management-activity-6880552718872649728-nEKs?trk=content-search-results-full-link',
 #  'type': 'Page Post Linkedin'}
 def get_post(url):
-    response = requests.request("GET", url)
+    cookies = {'bcookie': 'v=2&28333265-0d6c-4c5a-8268-fb0dc7861f89'}
+    response = requests.request("GET", url, cookies=cookies)
     if ('// Parse the tracking code from cookies.' in response.text):
         print('Cannot bypass the cookies')
         return None
@@ -62,13 +130,18 @@ def get_post(url):
     content = soup.find('p', {'class':'share-update-card__update-text'})
     author = soup.find('a', {'class':'share-update-card__actor-text-link'})
     date = soup.find('time', {'class':'share-update-card__post-date'})
+    related_topics = soup.find_all('a', {'data-tracking-control-name':'public_post_related-topics-pill'})
+    approx_date = get_date(date)
     row = {
         'type': 'Page Post Linkedin',
         'linkedin_url': url,
         'author': author.text.strip() if author is not None else '',
         'author_info': author_info.text.strip() if author_info is not None else '',
         'date': date.text.strip() if date is not None else '',
+        'approx_date': str(approx_date) if date is not None else '',
         'content': content.text.strip() if content is not None else '',
+        'related_topics': [i.text.strip() for i in related_topics] if related_topics is not None else [],
+        'hashtags': get_hashtagslist(content.text.strip()),
         'like_count': like_count.text.strip() if like_count is not None else '0',
         'comment_count': comment_count.text.strip() if comment_count is not None else '0'
     }

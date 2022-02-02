@@ -6,8 +6,8 @@ Just have to read environment configuration:
 - In visual code, install Azure Function Extensions https://marketplace.visualstudio.com/items?itemName=ms-azuretools.vscode-azurefunctions, also Python Extension https://marketplace.visualstudio.com/items?itemName=ms-python.python if you don't have
 - https://docs.python.org/3/library/venv.html
 On the root folder /AzureFunctions/ -> create .venv environment folder (command python -m venv .venv) in order to use
-Select interprecter there .venv environment
-Press F5 to run
+Select interprecter there .venv environment or  .venv\Scripts\activate in command
+Press F5 to run or command: func start
 - If it required Azure Web Job Storage to run, just install this: https://go.microsoft.com/fwlink/?linkid=717179&clcid=0x409
 
 !For testing api without install above environments: Get the docker from here: docker pull zhenyuan0502/azurefunctionimage:1.0
