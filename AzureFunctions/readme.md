@@ -38,7 +38,7 @@ Functions:
 
 
 !Development note:
-docker pull zhenyuan0502/azurefunctionsimage:1.3
+docker pull zhenyuan0502/azurefunctionimage:1.3
 docker build -t zhenyuan0502/azurefunctionimage:1.3 .
 docker push zhenyuan0502/azurefunctionimage:1.3
 docker run -p 8080:80 -it zhenyuan0502/azurefunctionimage:1.3
