@@ -131,7 +131,7 @@ def get_post(url):
     author = soup.find('a', {'class':'share-update-card__actor-text-link'})
     date = soup.find('time', {'class':'share-update-card__post-date'})
     related_topics = soup.find_all('a', {'data-tracking-control-name':'public_post_related-topics-pill'})
-    approx_date = get_date(date)
+    approx_date = get_date(date.text.strip())
     row = {
         'type': 'Page Post Linkedin',
         'linkedin_url': url,
