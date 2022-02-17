@@ -13,7 +13,11 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
 
             trends = req.params.get('trends')
             limit = req.params.get('limit')
-            return func.HttpResponse(ResponseSuccess(search_post(trends, int(limit))), mimetype="application/json")
+            if limit is None:
+                limit = 10
+            else:
+                limit = int(limit)
+            return func.HttpResponse(ResponseSuccess(search_post(trends, limit)), mimetype="application/json")
 
         return func.HttpResponse(ResponseFail('Route not found'), mimetype="application/json")
     except Exception as e:
