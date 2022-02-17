@@ -18,7 +18,10 @@ api = tw.API(auth, wait_on_rate_limit=True)
 #https://www.earthdatascience.org/courses/use-data-open-source-python/intro-to-apis/twitter-data-in-python/
 
 
-def search_tweet(trends):
+def search_tweet(trends, limit_posts = 10):
+
+    if limit_posts <= 0:
+        limit_posts = 10
 
     if trends is None:
         trends=["#Afghanistan","#COVID","#FIFA22","#Dune","#AMC","#SquidGame","#T20worldcup","#Ethereum","#TigerWoods","#Batllefield2042"]
@@ -32,7 +35,7 @@ def search_tweet(trends):
         tweets = tw.Cursor(api.search_tweets,
                     q=trend.strip(),
                     lang="en",
-                    result_type="mixed").items(10) 
+                    result_type="mixed").items(limit_posts) 
 
         for tweet in tweets:
             #for more information look here: https://developer.twitter.com/en/docs/twitter-api/v1/tweets/search/api-reference/get-search-tweets#example-response

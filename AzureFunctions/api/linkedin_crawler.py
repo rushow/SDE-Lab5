@@ -104,6 +104,47 @@ def get_pulse(url):
 
     return row
 
+import random
+# get_post_from_hub('https://www.linkedin.com/content-hub/accounting-f1/?trk=content-hub-home_explore-career-topics-pill')
+def get_post_from_hub(hub_url):
+    if hub_url is None:
+        links = list(get_main_hub_topics().items())
+        hub_url = links[random.randrange(0, len(links))][1]
+
+    cookies = {'bcookie': 'v=2&28333265-0d6c-4c5a-8268-fb0dc7861f89'}
+    response = requests.request("GET", hub_url, cookies=cookies)
+    if ('// Parse the tracking code from cookies.' in response.text):
+        print('Cannot bypass the cookies')
+        return None
+
+    rows = []
+    soup = BeautifulSoup(response.text, 'html.parser')
+    topic = soup.find('h1', {'class':'content-search-header__name'})
+    for soup_item in soup.find_all('li', {'class':'content-search-results__item'}):
+        url = soup_item.find('a', {'data-tracking-control-name':'content-search-results-full-link'})['href']
+        like_count = soup_item.find('span', {'class':'social-counts-reactions__social-counts-numRections'})
+        comment_count = soup_item.find('a', {'data-tracking-control-name':'content-search-results_share-update_social-details_social-action-counts_comments-text'})
+        author_info = soup_item.find('p', {'class':'share-update-card__actor-headline'})
+        content = soup_item.find('p', {'class':'share-update-card__update-text'})
+        author = soup_item.find('a', {'class':'share-update-card__actor-text-link'})
+        date = soup_item.find('time', {'class':'share-update-card__post-date'})
+        approx_date = get_date(date.text.strip())
+        row = {
+            'type': 'Page Post Linkedin',
+            'linkedin_url': url,
+            'author': author.text.strip() if author is not None else '',
+            'author_info': author_info.text.strip() if author_info is not None else '',
+            'date': date.text.strip() if date is not None else '',
+            'approx_date': str(approx_date) if date is not None else '',
+            'content': content.text.strip() if content is not None else '',
+            'related_topics': [topic.text.strip()],
+            'hashtags': get_hashtagslist(content.text.strip()),
+            'like_count': like_count.text.strip() if like_count is not None else '0',
+            'comment_count': comment_count.text.strip() if comment_count is not None else '0'
+        }
+        rows.append(row)
+    return rows
+
 
 # get_post('https://www.linkedin.com/posts/tom-alder_strategy-fintech-payments-activity-6835038759793381376-gz2F')
 # get_post('https://www.linkedin.com/posts/sushil627_reactjs-management-java-activity-6856798337744613376-DmG_?trk=content-search-results-full-link')
@@ -238,6 +279,7 @@ def get_post_links_in_hub_content():
         posts.extend(get_post_links_in_topic(val))
 
     return posts
+
 
 # use for search the specific location, ex Trento -> return geoId to use in search_job for more accurately
 def search_geo_id(geo_text):

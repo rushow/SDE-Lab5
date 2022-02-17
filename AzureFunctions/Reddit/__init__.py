@@ -9,10 +9,11 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
     try:
         type = req.route_params.get('type')
         if (type == 'search-reddit'):
-            # http://localhost:7071/api/Reddit/search-reddit?trends=Covid, Vaccine
+            # http://localhost:7071/api/Reddit/search-reddit?trends=Covid,Vaccine&limit=10
 
             trends = req.params.get('trends')
-            return func.HttpResponse(ResponseSuccess(search_post(trends)), mimetype="application/json")
+            limit = req.params.get('limit')
+            return func.HttpResponse(ResponseSuccess(search_post(trends, int(limit))), mimetype="application/json")
 
         return func.HttpResponse(ResponseFail('Route not found'), mimetype="application/json")
     except Exception as e:

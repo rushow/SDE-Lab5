@@ -5,9 +5,12 @@ import json
 client_id="BPeqBX7V9aPBAQMIZQGHRQ"
 secret="S1RvpoYGAefvUGWZY4mPlIjldKZRBg"
 user_agent="SDE webscrapping"
-def search_post(trends):
+def search_post(trends, limit_posts=10):
     reddit = praw.Reddit(client_id=client_id, client_secret=secret, user_agent=user_agent)
     rows = []
+
+    if limit_posts <= 0:
+        limit_posts = 10
 
     # if we want more info about the subrreddit (like description) https://praw.readthedocs.io/en/latest/code_overview/models/subreddit.html
     if trends is None:
@@ -18,7 +21,7 @@ def search_post(trends):
     for trend in trends:
         ml_subreddit = reddit.subreddit(trend.strip())
         try:
-            for post in ml_subreddit.hot(limit=10):
+            for post in ml_subreddit.hot(limit=limit_posts):
                 post.created=int(post.created)
                 timestamp = datetime.datetime.fromtimestamp(post.created)
                 name=""

@@ -36,6 +36,20 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
             hub_url = req.params.get('hub_url')
             return func.HttpResponse(ResponseSuccess(get_child_hub_topics(hub_url)), mimetype="application/json")
 
+        if (type == 'post-hub'):
+            # http://localhost:7071/api/Linkedin/post-hub?hub_url=https://www.linkedin.com/content-hub/accounting-f1/?trk=content-hub-home_explore-career-topics-pill
+            # http://localhost:7071/api/Linkedin/post-hub?hub_url=https://www.linkedin.com/content-hub/accountant-t40/?trk=aside-explore-pill
+            
+            hub_url = req.params.get('hub_url')
+            return func.HttpResponse(ResponseSuccess(get_post_links_in_topic(hub_url)), mimetype="application/json")
+
+        if (type == 'post-content-hub'):
+            # http://localhost:7071/api/Linkedin/post-content-hub?hub_url=https://www.linkedin.com/content-hub/accounting-f1/?trk=content-hub-home_explore-career-topics-pill
+            # http://localhost:7071/api/Linkedin/post-content-hub?hub_url=https://www.linkedin.com/content-hub/accountant-t40/?trk=aside-explore-pill
+            
+            hub_url = req.params.get('hub_url')
+            return func.HttpResponse(ResponseSuccess(get_post_from_hub(hub_url)), mimetype="application/json")
+
         if (type == 'search-geo'):
             # http://localhost:7071/api/Linkedin/search-geo?location=Trento
             location = req.params.get('location')
